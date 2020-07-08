@@ -4,7 +4,7 @@
         {{-- <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1"> --}}
 
-        <title>@yield('title')</title>
+        <title>{{ $title ?? 'Learn Laravel7' }}</title>
 
         {{-- <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}"> --}}
         <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -16,7 +16,7 @@
         <style>
             html, body {
                 background-color: #fff;
-                color: #636b6f;
+                color: #000000;
                 font-family: 'Nunito', sans-serif;
                 font-weight: 200;
                 height: 100vh;
@@ -44,7 +44,7 @@
             }
 
             .content {
-                text-align: center;
+                text-align: left;
             }
 
             .title {

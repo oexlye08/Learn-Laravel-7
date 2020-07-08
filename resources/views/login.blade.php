@@ -1,7 +1,9 @@
-@extends('layout.master')
-@section('title', 'Login')
+@extends('layout.master',  ['title' => 'Login'])
+{{-- @section('title', 'Login') --}}
 @section('content')
-<div class="title m-b-md">
-    Login
-</div>  
+<div class="container">
+    <div class="title m-b-md">
+        Login
+    </div>  
+</div>
 @endsection

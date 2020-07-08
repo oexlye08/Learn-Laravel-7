@@ -11,6 +11,7 @@
         <a class="nav-item nav-link{{ request()->is('contact')?' active' : '' }}" href="/contact">Contact</a>
         <a class="nav-item nav-link{{ request()->is('series/premium')?' active' : '' }}" href="/series/premium">Premium</a>
         <a class="nav-item nav-link{{ request()->is('login')?' active' : '' }}" href="/login">Login</a>   
+        <a class="nav-item nav-link{{ request()->is('post')?' active' : '' }}" href="/post">Post</a>   
       </div>
       
     </div>

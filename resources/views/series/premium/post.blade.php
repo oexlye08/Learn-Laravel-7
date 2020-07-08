@@ -1,8 +1,10 @@
-@extends('/layout.master')
+@extends('/layout.master', ['title' => 'Premium'])
 
-@section('title', 'Premium')
+{{-- @section('title', 'Premium') --}}
 @section('content')
-<div class="title m-b-md">
-    Premium series
-</div>  
-@endsection
+<div class="container">
+    <div class="title m-b-md">
+        Premium series
+    </div>  
+</div>
+@endsection 

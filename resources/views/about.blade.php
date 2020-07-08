@@ -1,8 +1,10 @@
-@extends('layout/master')
+@extends('layout/master', ['title' => 'About'])
 @section('title', 'About')
 @section('content')
-<div class="title m-b-md">
-    About
-</div> 
+<div class="container">
+    <div class="title m-b-md">
+        About
+    </div> 
+</div>
 
 @endsection
