@@ -6,13 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Get extends Model
 {
-    public function scopeLatestFirst()
-    {
-        return $this->latest()->first();
-    }
-
-    public function scopeLatestGet()
-    {
-        return $this->latest()->get();
-    }
+    protected $fillable = ['title', 'slug', 'body']; //gunakan saat yang menginput adalah user (alasan keamanan)
+    // protected $guard =[]; //gunakan saat yang menginput anda sendiri
 }
