@@ -8,11 +8,22 @@
             <h1>
                 {{ $get->title }}
             </h1>
-            <h2>
-                {{ $get->created_at->diffForHumans() }}
-                <!--untuk mengganti format ke dalam bahasa indonesia ke Config/App.php -> locale-->
-            </h2>
+            <div class="text-secondary">
+                <h5>
+                    <a href="/categories/{{ $get->category->slug }}">
+                        {{ $get->category->name }}
+                    </a>
+                     &middot;
+                    {{ $get->created_at->diffForHumans() }}
+                    <!--untuk mengganti format ke dalam bahasa indonesia ke Config/App.php -> locale-->
+                    &middot;
+                    @foreach ($get->tags as $tag)
+                        <a href="#">{{ $tag->name }}</a>
+                    @endforeach
+                </h5>
+            </div>
         </div>  
+        <hr>
         <p>
             {{ $get->body }}
         </p>

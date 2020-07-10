@@ -32,5 +32,7 @@ Route::delete('post/{get:slug}/delete', 'GetController@destroyed');
 Route::get('post/{get:slug}','GetController@show');
 // Route::get('post/{slug}','PostController@show');
 
+Route::get('categories/{category:slug}','CategoryController@show');
+
 //model binding 
 Route::get('series/{serie:slug}','SeriesController@show');

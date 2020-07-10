@@ -4,7 +4,12 @@
     <div class="container" >
         <div class="d-flex justify-content-between">
             <div class="title">
-                All Post
+                @isset($category)
+                    Category : {{ $category->name }}
+                @else
+                    All Post
+                @endisset
+                
             </div>
             <div class="button mt-5">
                 <a href="/post/create" class="btn btn-primary">New Post</a>
