@@ -1,4 +1,5 @@
 @extends('layout.master', ['title' => 'All post'])
+{{-- @extends('layouts.app', ['title' => 'All post']) --}}
 
 @section('content')
     <div class="container" >
@@ -6,13 +7,20 @@
             <div class="title">
                 @isset($category)
                     Category : {{ $category->name }}
-                @else
-                    All Post
                 @endisset
+                @isset($tag)
+                    Tag : {{ $tag->name }}
+                @endisset
+
+                @if (!isset($tag) && !isset($category))
+                    All Post
+                @endif
                 
             </div>
             <div class="button mt-5">
-                <a href="/post/create" class="btn btn-primary">New Post</a>
+                @if (Auth::check())
+                    <a href="{{ route('posts.create') }}" class="btn btn-primary">New Post</a>
+                @endif
             </div>
 
         </div>
@@ -29,13 +37,17 @@
                             <div>
                                 {{ Str::limit($get->body, 100, '.' )}}
                             </div>
-
-                            <a href="/post/{{ $get->slug }}">Read more</a>
+                            <a href="post/{{ $get->slug }}">Read more</a>    
+                            
                         </div>
                         
                         <div class="card-footer d-flex justify-content-between">
                             Publish on {{ $get->created_at->format('d F, Y') }} 
+                            
+                            @auth
                             <a href="/post/{{ $get->slug }}/edit" class="btn btn-sm btn-success">Edit</a>
+                            @endauth
+                            
                         </div>
                     </div>
                 </div>

@@ -15,6 +15,8 @@ class CreateGetsTable extends Migration
     {
         Schema::create('gets', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id');
+            $table->string('thumbnail');
             $table->string('title', 191);
             $table->string('slug', 191);
             $table->text('body');

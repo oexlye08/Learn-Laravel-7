@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Get;
+use App\{Category, Get, Tag};
 use App\Http\Requests\GetRequest;
 use Illuminate\Http\Request;
 
@@ -31,7 +31,12 @@ class GetController extends Controller
 
     public function create()
     {
-        return view('post.create', ['get'=> new Get()]);
+        
+        return view('post.create', [
+            'get'=> new Get(),
+            'categories' => Category::get(),
+            'tags' => Tag::get()
+            ]);
     }
 
     
@@ -42,9 +47,11 @@ class GetController extends Controller
 
         //Assign title to slug
         $attr['slug'] = \Str::slug(request('title'));
+        $attr['category_id'] = request('category');
 
         //Create post to database
-        Get::create($attr);
+        $get = Get::create($attr);
+        $get->tags()->attach(request('tags'));
 
         session()->flash('success', 'The post success to create');
         // session()->flash('error', 'The post failed to create');
@@ -76,15 +83,22 @@ class GetController extends Controller
 
     public function edit(Get $get)
     {
-        return view('post.edit', compact('get'));
+        // return view('post.edit', compact('get'));
+        return view('post.edit', [
+            'get' => $get,
+            'categories' => Category::get(),
+            'tags' => Tag::get()
+        ]);
     }
 
     public function update(GetRequest $request, Get $get)
     {
         //validate the field
         $attr = $request->all();
+        $attr['category_id'] = request('category');
 
         $get -> update($attr);
+        $get->tags()->sync(request('tags'));
 
         session()->flash('success', 'The post success to edit');
 
@@ -97,13 +111,17 @@ class GetController extends Controller
         return request()->validate([
             'title' => 'required',
             'body' => 'required',
+            'category' => 'required',
+            'tags' => 'array|required',
         ]);
     }
 
     public function destroyed(Get $get) 
     {
+        $get->tags()->detach();
         $get->delete();
         session()->flash('success', 'The post has ben destroyed');
         return redirect()->to('post');
-    }
+    } 
+    
 }

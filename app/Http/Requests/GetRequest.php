@@ -26,6 +26,8 @@ class GetRequest extends FormRequest
         return [
             'title' => 'required',
             'body' => 'required',
+            'category' => 'required',
+            'tags' => 'array|required'
         ];
     }
 }
