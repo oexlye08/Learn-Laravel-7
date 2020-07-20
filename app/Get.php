@@ -6,8 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Get extends Model
 {
-    protected $fillable = ['title', 'slug', 'body', 'category_id']; //gunakan saat yang menginput adalah user (alasan keamanan)
+    protected $fillable = ['title', 'slug', 'body', 'category_id', 'thumbnail']; //gunakan saat yang menginput adalah user (alasan keamanan)
     // protected $guard =[]; //gunakan saat yang menginput anda sendiri
+    protected $with = ['author', 'category', 'tags'];
 
     public function category()
     {
@@ -18,5 +19,15 @@ class Get extends Model
     public function tags()
     {
         return $this->belongsToMany(Tag::class);
+    }
+
+    public function author()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function getThumbnail()
+    {
+        return "/storage/" . $this->thumbnail;
     }
 }

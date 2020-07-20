@@ -12,5 +12,5 @@ class Category extends Model
     {
         // return $this->hasMany(Get::class, 'nama_field');  <<<<<< di gunakan apabila nama filed nya bukan 'category_id'
         return $this->hasMany(Get::class);
-    }
+    } 
 }

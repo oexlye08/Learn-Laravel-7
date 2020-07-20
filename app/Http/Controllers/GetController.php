@@ -26,7 +26,8 @@ class GetController extends Controller
 
     public function show(Get $get)
     {
-        return view ('post.show', compact('get'));
+        $gets =  Get::where('category_id', $get->category_id)->latest()->limit(6)->get();
+        return view ('post.show', compact('get', 'gets'));
     } 
 
     public function create()
@@ -40,17 +41,62 @@ class GetController extends Controller
     }
 
     
-    public function store()
+    public function storeOld()
     {
         //validate the field
         $attr = $this->validateRequest();
 
         //Assign title to slug
-        $attr['slug'] = \Str::slug(request('title'));
+        $slug = \Str::slug(request('title'));
+        $attr['slug'] = $slug;
+
+        // $thumbnail = request()->file('thumbnail');
+        // $thumbnailUrl = $thumbnail->storeAs("images/post", "{$slug}.{$thumbnail->extension()}");
+
+        $thumbnail = request()->file('thumbnail') ? request()->file('thumbnail')->store("images/post") : null;
+
+        //Assign category
         $attr['category_id'] = request('category');
+        //Assign images
+        $attr['thumbnail'] = $thumbnailUrl;
 
         //Create post to database
-        $get = Get::create($attr);
+        $get = auth()->user()->gets()->create($attr);
+        // $get = Get::create($attr);
+        $get->tags()->attach(request('tags'));
+
+        session()->flash('success', 'The post success to create');
+        // session()->flash('error', 'The post failed to create');
+
+        //redirect
+        return redirect()->to('post');
+    }
+
+    public function store(GetRequest $request)
+    {
+        $request->validate([
+            'thumbnail' => 'image|mimes:jpeg,png,jpg,gif,svg|max:1024'
+        ]);
+        //validate the field
+        $attr = $request->all();
+
+        //Assign title to slug
+        $slug = \Str::slug(request('title'));
+        $attr['slug'] = $slug;
+
+        // $thumbnail = request()->file('thumbnail');
+        // $thumbnailUrl = $thumbnail->storeAs("images/post", "{$slug}.{$thumbnail->extension()}");
+
+        $thumbnail = request()->file('thumbnail') ? request()->file('thumbnail')->store("images/post") : null;
+
+        //Assign category
+        $attr['category_id'] = request('category');
+        //Assign images
+        $attr['thumbnail'] = $thumbnail;
+
+        //Create post to database
+        $get = auth()->user()->gets()->create($attr);
+        // $get = Get::create($attr);
         $get->tags()->attach(request('tags'));
 
         session()->flash('success', 'The post success to create');
@@ -93,9 +139,25 @@ class GetController extends Controller
 
     public function update(GetRequest $request, Get $get)
     {
+        //this is from pilicy
+        $this->authorize('update', $get);
+
+        $request->validate([
+            'thumbnail' => 'image|mimes:jpeg,png,jpg,gif,svg|max:1024'
+        ]);
+
+        if(request()->file('thumbnail')){
+            \Storage::delete($get->thumbnail);
+            $thumbnail = request()->file('thumbnail')->store("images/post");
+        }else{
+            $thumbnail = $get->thumbnail;
+        }
+
+        
         //validate the field
         $attr = $request->all();
         $attr['category_id'] = request('category');
+        $attr['thumbnail'] = $thumbnail;
 
         $get -> update($attr);
         $get->tags()->sync(request('tags'));
@@ -105,6 +167,29 @@ class GetController extends Controller
         //redirect
         return redirect()->to('post');
     }
+
+    public function destroyed(Get $get) 
+    {
+
+        // if (auth()->user()->is($get->author)) {
+             
+        //     $get->tags()->detach();
+        //     $get->delete();
+        //     session()->flash('success', 'The post has ben destroyed');
+        //     return redirect()->to('post');
+        // } else {
+        //     session()->flash("error", "You can't delete this post");
+        //     return redirect()->to('post');
+        // }
+
+        \Storage::delete($get->thumbnail);
+        $this->authorize('update', $get);
+        $get->tags()->detach();
+        $get->delete();
+        session()->flash('success', 'The post has ben destroyed');
+        return redirect()->to('post');
+       
+    } 
 
     public function validateRequest()
     {
@@ -116,12 +201,6 @@ class GetController extends Controller
         ]);
     }
 
-    public function destroyed(Get $get) 
-    {
-        $get->tags()->detach();
-        $get->delete();
-        session()->flash('success', 'The post has ben destroyed');
-        return redirect()->to('post');
-    } 
+   
     
 }
