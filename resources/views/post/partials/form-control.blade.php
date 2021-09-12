@@ -34,7 +34,7 @@
 </div>
 
 <div class="form-group">
-    <label for="tags">Tags</label>
+    <label for="tags">Tags</label> 
     <select name="tags[]" id="tags"class="form-control select2" multiple>
         {{-- @foreach ($get->tags as $tag)
             <option selected value="{{ $tag->id }}">{{ $tag->name }}</option>

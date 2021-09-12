@@ -24,7 +24,7 @@ class GetController extends Controller
         ]);
     }
 
-    public function show(Get $get)
+    public function show(Get $get) 
     {
         $gets =  Get::where('category_id', $get->category_id)->latest()->limit(6)->get();
         return view ('post.show', compact('get', 'gets'));

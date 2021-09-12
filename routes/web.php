@@ -28,7 +28,7 @@ Route::prefix('post')->middleware('auth')->group(function(){
 
     Route::get('{get:slug}/edit','GetController@edit');
     Route::patch('{get:slug}/edit','GetController@update');
-    //put : untuk seluruh field di db
+    //put : untuk seluruh field di db 
     //patch : untuk sebagian filed
 
     Route::delete('{get:slug}/delete', 'GetController@destroyed');
